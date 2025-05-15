@@ -46,9 +46,9 @@ func (s *Server) buildRoutes() {
 
 	// Add a default handler
 	if config.DefaultAction == "allow" {
-		s.muxer.NewRoute().Handler(s.AllowHandler("default"))
+		_ = s.muxer.AddRoute("/", "v2", 1, s.AllowHandler("default"))
 	} else {
-		s.muxer.NewRoute().Handler(s.AuthHandler(config.DefaultProvider, "default"))
+		_ = s.muxer.AddRoute("/", "v2", 1, s.AuthHandler(config.DefaultProvider, "default"))
 	}
 }
 
