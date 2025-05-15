@@ -39,10 +39,10 @@ func (s *Server) buildRoutes() {
 	}
 
 	// Add callback handler
-	s.muxer.Handle(config.Path, s.AuthCallbackHandler())
+	_ = s.muxer.AddRoute(config.Path, "v2", 1, s.AuthCallbackHandler())
 
 	// Add logout handler
-	s.muxer.Handle(config.Path+"/logout", s.LogoutHandler())
+	_ = s.muxer.AddRoute(config.Path+"/logout", "v2", 1, s.LogoutHandler())
 
 	// Add a default handler
 	if config.DefaultAction == "allow" {
