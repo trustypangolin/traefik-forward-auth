@@ -1,15 +1,26 @@
-FROM golang:1.20-alpine as builder
+# docker buildx create --name pangolin
+# docker buildx use pangolin
+# docker buildx build --platform linux/arm64,linux/amd64,linux/arm/v7,linux/arm/v6 --push -t gitlab.disk.luton.net.au/trustypangolin/traefik-forward-auth:latest .
+
+FROM --platform=${BUILDPLATFORM} golang:1.24.3-alpine as builder
+
+ARG TARGETPLATFORM
+ARG TARGETARCH
+ARG TARGETVARIANT
+RUN printf "NOTE: docker build --progress=plain --no-cache --platform=<YOUR-TARGET-PLATFORM>"
+RUN printf "TARGETPLATFORM=${TARGETPLATFORM}"
+RUN printf "TARGETARCH=${TARGETARCH}"
 
 # Setup
-RUN mkdir -p /go/src/github.com/thomseddon/traefik-forward-auth
-WORKDIR /go/src/github.com/thomseddon/traefik-forward-auth
+RUN mkdir -p /go/src/github.com/trustypangolin/traefik-forward-auth
+WORKDIR /go/src/github.com/trustypangolin/traefik-forward-auth
 
 # Add libraries
 RUN apk add --no-cache git
 
 # Copy & build
-ADD . /go/src/github.com/thomseddon/traefik-forward-auth/
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on go build -a -installsuffix nocgo -o /traefik-forward-auth github.com/thomseddon/traefik-forward-auth/cmd
+ADD . /go/src/github.com/trustypangolin/traefik-forward-auth/
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} GO111MODULE=on go build -a -installsuffix nocgo -o /traefik-forward-auth github.com/trustypangolin/traefik-forward-auth/cmd
 
 # Copy into scratch container
 FROM scratch
