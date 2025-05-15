@@ -28,13 +28,13 @@ func (s *Server) buildRoutes() {
 		log.Fatal(err)
 	}
 
-	// Let's build a muxer
+	// Let's build a muxer, keeping v2 Traefik rules for now
 	for name, rule := range config.Rules {
 		matchRule := rule.formattedRule()
 		if rule.Action == "allow" {
-			_ = s.muxer.AddRoute(matchRule, 1, s.AllowHandler(name))
+			_ = s.muxer.AddRoute(matchRule, "v2", 1, s.AllowHandler(name))
 		} else {
-			_ = s.muxer.AddRoute(matchRule, 1, s.AuthHandler(rule.Provider, name))
+			_ = s.muxer.AddRoute(matchRule, "v2", 1, s.AuthHandler(rule.Provider, name))
 		}
 	}
 

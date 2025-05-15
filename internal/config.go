@@ -134,7 +134,7 @@ func NewConfig(args []string) (*Config, error) {
 }
 
 func (c *Config) parseFlags(args []string) error {
-	p := flags.NewParser(c, flags.Default|flags.IniUnknownOptionHandler)
+	p := flags.NewParser(c, flags.Default)
 	p.UnknownOptionHandler = c.parseUnknownFlag
 
 	i := flags.NewIniParser(p)

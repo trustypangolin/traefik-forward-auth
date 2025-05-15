@@ -1,8 +1,9 @@
+# docker login gitlab.domain -u username -p glpat-tokenvals
 # docker buildx create --name pangolin
 # docker buildx use pangolin
-# docker buildx build --platform linux/arm64,linux/amd64,linux/arm/v7,linux/arm/v6 --push -t gitlab.disk.luton.net.au/trustypangolin/traefik-forward-auth:latest .
+# docker buildx build --platform linux/arm64,linux/amd64,linux/arm/v7 --push -t gitlab.domain/trustypangolin/traefik-forward-auth:latest .
 
-FROM --platform=${BUILDPLATFORM} golang:1.24.3-alpine as builder
+FROM --platform=${BUILDPLATFORM} golang:1.24.3-alpine AS builder
 
 ARG TARGETPLATFORM
 ARG TARGETARCH
